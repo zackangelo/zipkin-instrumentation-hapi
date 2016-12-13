@@ -96,7 +96,11 @@ exports.register = (server, {tracer, serviceName = 'unknown', port = 0}, next) =
 
     tracer.scoped(() => {
       tracer.setId(request.plugins.zipkin.traceId);
-      tracer.recordBinary('http.status_code', response.statusCode.toString());
+
+      if(response && response.statusCode) { 
+        tracer.recordBinary('http.status_code', response.statusCode.toString());
+      }
+      
       tracer.recordAnnotation(new Annotation.ServerSend());
     });
 
